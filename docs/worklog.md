@@ -61,3 +61,22 @@
 **Result:** Phase 03 acceptance checks pass — every displayed number is recomputed from the fixture, detection is deterministic (tested), the domain package has zero framework imports, and boundary cases (zero spend, missing month, negative adjustment) are covered by tests.
 
 **Remaining risks:** None blocking for this phase. Not yet pushed to GitHub/Vercel as of this log entry — planned as the next commit.
+
+## 2026-07-30 — Phase 04: Neon Postgres + Drizzle (scaffolding)
+
+**Decisions / commands run:**
+- Created `packages/db` with `drizzle-orm@^0.45.2`, `postgres@^3.4.9`, `drizzle-kit@^0.31.10`, `tsx@^4.23.1` (versions confirmed current via `npm view`).
+- Wrote `src/schema.ts`: `tenants`, `memberships`, `cost_centers`, `spend_records`, `anomalies`, `savings_proposals`, `approvals`, `executions`, `receipts`, `durable_tasks`, `audit_events` — 11 tables. Every tenant-owned table carries a `tenant_id` column with a foreign key to `tenants` and a compound unique constraint scoped to the tenant (e.g. `spend_records_tenant_cc_period_unique` on `(tenant_id, cost_center_id, period)`), so no query can silently cross tenants.
+- Wrote `src/client.ts` (lazy pooled Postgres connection via `postgres-js`, reads `DATABASE_URL` at call time not module load), `src/migrate.ts`, `src/seed.ts` (idempotent — upserts via `onConflictDoUpdate` keyed on primary id, safe to run repeatedly, loads `scenario-packs/seed/demo-corp.json`), and tenant-scoped repository adapters in `src/repositories/` (`tenants.ts`, `cost-centers.ts`, `spend-records.ts`) that map DB rows to the `@spendguard/domain` entity types.
+- Generated the initial migration with `drizzle-kit generate` (using a placeholder `DATABASE_URL` — generation is schema-only and needs no live connection): `packages/db/drizzle/0000_dizzy_molly_hayes.sql`, committed alongside its `meta/` snapshot/journal.
+- Added `packages/db/tests/schema.test.ts` (3 vitest cases asserting the tenancy invariants: every tenant-owned table has `tenant_id`, and `spend_records` has a tenant-scoped compound unique constraint) — passes without a live database, since it only inspects Drizzle's static table config.
+- Fixed a module-resolution mismatch: initially set `packages/db/tsconfig.json` to `module`/`moduleResolution: "NodeNext"` (which requires explicit `.js` extensions on relative imports), but this conflicted with `tsc`'s single-program resolution mode when type-checking `@spendguard/domain`'s extensionless imports transitively. Reverted `packages/db` to the same `bundler` resolution as the rest of the repo and switched its own relative imports to extensionless, for consistency.
+- `pnpm --filter @spendguard/db typecheck` and `test` pass; `pnpm turbo lint typecheck test build` passes across all 5 packages (`@spendguard/config`, `@spendguard/contracts`, `@spendguard/db`, `@spendguard/domain`, `web`).
+- Walked the user through adding the Neon integration via the Vercel Marketplace (Storage tab → Connect Database → Neon → link to `spendguard-mcp-web`, both Production and Preview environments) — not yet completed as of this entry.
+
+**Deviations:**
+- `db:migrate` and `db:seed` have not yet been run against a live database — no Neon connection exists yet. They are implemented and typecheck cleanly; execution is pending Phase 04 external-account step.
+
+**Result:** Phase 04 scaffolding acceptance checks pass (schema, migrations generate cleanly, tenancy invariants hold, tests pass). Live migration/seed against Neon and preview/production environment isolation are pending the Neon integration.
+
+**Remaining risks:** Once Neon is connected, need to confirm the exact env var name(s) Vercel/Neon inject (commonly `DATABASE_URL` or `POSTGRES_URL`) and ensure `packages/db` reads the correct one; also need a preview-branch database per the "never use production connection string for local tests or preview resets" rule.
