@@ -98,3 +98,21 @@
 **Result:** Phase 04 acceptance checks pass — migration applies to a fresh(er) database cleanly, seed is idempotent (verified twice), and the `/demo` UI reads real repository-backed data instead of fixture memory. Preview-environment database isolation (separate Neon branch for PRs) is provided by Vercel's Neon integration by default (Preview environment linked separately) but not yet explicitly exercised with a PR.
 
 **Remaining risks:** Have not yet opened a PR to confirm the Preview environment gets its own isolated Neon branch/connection rather than reusing production data — should verify on the next feature PR.
+
+## 2026-07-30 — Project relocated to `E:\spendguard-mcp`
+
+**Decisions / commands run:**
+- Moved the project root from `E:\mastering-a-skill\spendguard-mcp` to `E:\spendguard-mcp` at the user's request (top-level location, same repo name).
+- Stopped all running Node/Next dev server processes bound to the old path first (found via `Get-CimInstance Win32_Process` filtering on command line, then `Stop-Process`).
+- Deleted all `node_modules` directories (root + `apps/web`) instead of moving them — they're regenerable and moving them wasted time/tokens on Windows due to long nested `pnpm`/Next.js paths hitting `MAX_PATH` limits during `robocopy`. Moved everything else (`.git`, `docs`, `packages`, `apps` source/config, root config files) via `Move-Item`/`robocopy /MOVE`.
+- The `packages` move via `Move-Item` silently dropped `packages/domain`'s contents (likely a partial-copy edge case). Caught via `git status` showing `deleted: packages/domain/*` and fixed with `git restore packages/domain` — since `.git` (176 objects) moved intact, nothing was actually lost; git's object database was the source of truth for recovery.
+- Untracked, gitignored env files (`packages/db/.env`, `apps/web/.env.local`) needed to be recreated after the move since they aren't tracked by git — recreated `packages/db/.env` by copying the `DATABASE_URL` line out of the surviving `apps/web/.env.local`.
+- Ran `pnpm install` fresh at the new location (`E:\spendguard-mcp`), cleared stale `.turbo` cache directories (their cached stdout still referenced the old path in log replays — cosmetic only, not a functional issue), and reran `pnpm turbo lint typecheck test build` — all green, `next build` connected to the live Neon database from the new path successfully.
+- `git remote -v` and `git log` confirm the GitHub remote and full commit history are untouched — a local folder move requires zero git remote/config changes since Git doesn't store absolute local paths.
+- Left an empty, locked leftover skeleton at `E:\mastering-a-skill\spendguard-mcp\apps\web` (0 real files) that a Windows process — likely the IDE's file watcher on the old workspace root — held open. Not deletable mid-session; harmless, and the user can remove `E:\mastering-a-skill` manually after closing/reloading the IDE window.
+
+**Deviations:** None functionally — same repo, same remote, same env var names, just moved.
+
+**Result:** Repo now lives at `E:\spendguard-mcp`; full check suite (`lint`, `typecheck`, `test`, `build`) passes, dev server serves live Neon-backed `/demo` data, and `git status` is clean against `origin/main`.
+
+**Remaining risks:** User should reopen their IDE window pointed at `E:\spendguard-mcp` (the old window may still reference the deleted path) and manually delete the leftover `E:\mastering-a-skill` skeleton once no process holds it.

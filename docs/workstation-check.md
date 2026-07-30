@@ -26,7 +26,7 @@ Verified with `git config --global --list`.
 
 ## Project Root
 
-`E:\mastering-a-skill\spendguard-mcp` — created as the new project root. The earlier portfolio-demo repository at `e:\spend-guard` (containing only the master prompt) is left intact.
+`E:\spendguard-mcp` — the project root (originally created at `E:\mastering-a-skill\spendguard-mcp`, relocated to the E: drive root on 2026-07-30; see `docs/worklog.md`). The earlier portfolio-demo repository at `e:\spend-guard` (containing only the master prompt) is left intact.
 
 ## Acceptance Checks
 
