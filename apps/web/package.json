@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@spendguard/db": "workspace:*",
     "@spendguard/domain": "workspace:*",
     "next": "16.2.12",
     "react": "19.2.4",

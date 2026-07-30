@@ -15,8 +15,8 @@ const KIND_LABELS: Record<string, string> = {
   data_quality_gap: "Data quality gap",
 };
 
-export default function DemoPage() {
-  const { tenant, costCentersById, trend, byCostCenter, total, anomalies } = loadDemoCorpData();
+export default async function DemoPage() {
+  const { tenant, costCentersById, trend, byCostCenter, total, anomalies } = await loadDemoCorpData();
 
   const latestPeriod = trend.length > 0 ? trend[trend.length - 1]!.period : null;
   const topCostCentersLatest = byCostCenter

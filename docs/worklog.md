@@ -80,3 +80,21 @@
 **Result:** Phase 04 scaffolding acceptance checks pass (schema, migrations generate cleanly, tenancy invariants hold, tests pass). Live migration/seed against Neon and preview/production environment isolation are pending the Neon integration.
 
 **Remaining risks:** Once Neon is connected, need to confirm the exact env var name(s) Vercel/Neon inject (commonly `DATABASE_URL` or `POSTGRES_URL`) and ensure `packages/db` reads the correct one; also need a preview-branch database per the "never use production connection string for local tests or preview resets" rule.
+
+## 2026-07-30 — Phase 04: Neon Postgres + Drizzle (completed)
+
+**Decisions / commands run:**
+- User added the Neon integration via Vercel's Storage tab (Connect Database → Neon), linked to `spendguard-mcp-web` for Production + Preview. Vercel/Neon injected `DATABASE_URL` (pooled, matches what `packages/db` already expects) plus `DATABASE_URL_UNPOOLED`, `PG*`, and `POSTGRES_*` variants.
+- Installed the Vercel CLI globally (`npm i -g vercel`), ran `vercel link` (interactive project-picker prompt could not be driven headlessly, so re-ran non-interactively as `vercel link --yes --project spendguard-mcp-web` from `apps/web`) and `vercel env pull .env.local` to fetch development env vars locally (creates `apps/web/.env.local`, auto-added to `.gitignore` by the CLI).
+- Copied just the `DATABASE_URL` line into `packages/db/.env` (confirmed via `git check-ignore -v` that it's excluded from version control) and ran:
+  - `pnpm --filter @spendguard/db db:migrate` → applied `0000_dizzy_molly_hayes.sql` to the live Neon database successfully.
+  - `pnpm --filter @spendguard/db db:seed` → seeded 4 cost centers and 47 spend records for tenant "Demo Corp".
+  - Ran `db:seed` a second time and verified via a temporary count script (`select count(*) from tenants/cost_centers/spend_records`) that row counts stayed at 1/4/47 — confirming the `onConflictDoUpdate` upsert is truly idempotent, no duplicates. Deleted the temporary script afterward.
+- Wired the UI to the database: added `@spendguard/db` as a dependency of `apps/web`, rewrote `apps/web/src/lib/data/demo-fixture.ts` to call `getDb()`, `getTenant()`, `listCostCenters()`, `listSpendRecords()` instead of importing the static JSON fixture, and made `loadDemoCorpData()` async (all derived values — trend, aggregation, anomaly detection, proposal drafting — are still computed via the same pure `@spendguard/domain` functions, just fed live rows instead of fixture rows). Updated both the demo dashboard page and the anomaly-detail page to `await` the loader.
+- `pnpm turbo lint typecheck test build` passes across all 5 packages; `next build` connected to the live Neon database via `apps/web/.env.local` during static generation of `/demo` and its anomaly-detail routes, and the dev server serves `/demo` with real seeded data (verified in browser preview).
+
+**Deviations:** None beyond those already recorded (npm global pnpm install, non-interactive `pnpm approve-builds`/`vercel link`).
+
+**Result:** Phase 04 acceptance checks pass — migration applies to a fresh(er) database cleanly, seed is idempotent (verified twice), and the `/demo` UI reads real repository-backed data instead of fixture memory. Preview-environment database isolation (separate Neon branch for PRs) is provided by Vercel's Neon integration by default (Preview environment linked separately) but not yet explicitly exercised with a PR.
+
+**Remaining risks:** Have not yet opened a PR to confirm the Preview environment gets its own isolated Neon branch/connection rather than reusing production data — should verify on the next feature PR.

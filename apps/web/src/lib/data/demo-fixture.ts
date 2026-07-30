@@ -1,6 +1,10 @@
 import {
-  asCostCenterId,
-  asTenantId,
+  getDb,
+  getTenant,
+  listCostCenters,
+  listSpendRecords,
+} from "@spendguard/db";
+import {
   detectSpendAnomalies,
   draftSavingsProposal,
   summarizeSpendByCostCenter,
@@ -8,67 +12,29 @@ import {
   totalSpend,
   type Anomaly,
   type AnomalyId,
-  type CostCenter,
   type ProposalId,
-  type SpendRecord,
-  type Tenant,
 } from "@spendguard/domain";
 
-import demoCorpFixture from "../../../../../scenario-packs/seed/demo-corp.json";
-
-interface DemoCorpFixture {
-  readonly tenant: { readonly id: string; readonly name: string };
-  readonly costCenters: ReadonlyArray<{
-    readonly id: string;
-    readonly tenantId: string;
-    readonly name: string;
-    readonly cloudProvider: "aws" | "gcp" | "azure" | "simulated";
-  }>;
-  readonly spendRecords: ReadonlyArray<{
-    readonly id: string;
-    readonly tenantId: string;
-    readonly costCenterId: string;
-    readonly period: string;
-    readonly amount: { readonly amountMinorUnits: number; readonly currency: string };
-    readonly recordedAt: string;
-  }>;
-}
-
-const fixture = demoCorpFixture as DemoCorpFixture;
-
-function loadTenant(): Tenant {
-  return { id: asTenantId(fixture.tenant.id), name: fixture.tenant.name };
-}
-
-function loadCostCenters(): CostCenter[] {
-  return fixture.costCenters.map((cc) => ({
-    id: asCostCenterId(cc.id),
-    tenantId: asTenantId(cc.tenantId),
-    name: cc.name,
-    cloudProvider: cc.cloudProvider,
-  }));
-}
-
-function loadSpendRecords(): SpendRecord[] {
-  return fixture.spendRecords.map((sr) => ({
-    id: sr.id as SpendRecord["id"],
-    tenantId: asTenantId(sr.tenantId),
-    costCenterId: asCostCenterId(sr.costCenterId),
-    period: sr.period,
-    amount: sr.amount,
-    recordedAt: sr.recordedAt,
-  }));
-}
+const DEMO_TENANT_ID = "tenant-demo-corp";
 
 /**
- * Loads the deterministic Demo Corp fixture and derives every dashboard value
- * from it via pure @spendguard/domain functions. Every number on the demo
- * dashboard can be recomputed from `scenario-packs/seed/demo-corp.json`.
+ * Loads Demo Corp from Neon Postgres (seeded from `scenario-packs/seed/demo-corp.json`
+ * via `packages/db`'s idempotent seed script) and derives every dashboard value
+ * through pure @spendguard/domain functions. Every number on the demo dashboard
+ * can be recomputed from the seeded rows — no value is computed ad hoc in the UI.
  */
-export function loadDemoCorpData() {
-  const tenant = loadTenant();
-  const costCenters = loadCostCenters();
-  const spendRecords = loadSpendRecords();
+export async function loadDemoCorpData() {
+  const db = getDb();
+
+  const tenant = await getTenant(db, DEMO_TENANT_ID);
+  if (!tenant) {
+    throw new Error(
+      `Demo tenant "${DEMO_TENANT_ID}" was not found. Run "pnpm --filter @spendguard/db db:seed" against the configured DATABASE_URL first.`,
+    );
+  }
+
+  const costCenters = await listCostCenters(db, tenant.id);
+  const spendRecords = await listSpendRecords(db, tenant.id);
 
   const costCentersById = new Map(costCenters.map((cc) => [cc.id, cc] as const));
 

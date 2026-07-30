@@ -15,7 +15,7 @@ export default async function AnomalyDetailPage({
   params: Promise<{ anomalyId: string }>;
 }) {
   const { anomalyId } = await params;
-  const { anomalies, costCentersById, proposalsByAnomalyId } = loadDemoCorpData();
+  const { anomalies, costCentersById, proposalsByAnomalyId } = await loadDemoCorpData();
   const anomaly = findAnomalyById(anomalies, decodeURIComponent(anomalyId));
 
   if (!anomaly) {

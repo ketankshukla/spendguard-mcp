@@ -9,7 +9,7 @@ Tracks phases from the master build prompt, dependencies, risks, and acceptance 
 | 01 | Prepare workstation | Done | See `docs/workstation-check.md` |
 | 02 | Monorepo + first deployed shell | Done | GitHub: https://github.com/ketankshukla/spendguard-mcp · Production: https://spendguard-mcp-web.vercel.app/ |
 | 03 | Deterministic FinOps domain slice | Done | `packages/domain`, `packages/contracts`, seeded dashboard at `/demo` |
-| 04 | Neon Postgres + Drizzle | In progress | Schema/migrations/repositories scaffolded in `packages/db`; awaiting Neon integration via Vercel Marketplace to seed a live database |
+| 04 | Neon Postgres + Drizzle | Done | Neon connected via Vercel Marketplace; migrated + seeded (1 tenant, 4 cost centers, 47 spend records); `/demo` dashboard now reads live DB via `@spendguard/db` repositories |
 | 05 | WorkOS AuthKit identity/roles | Pending | Requires WorkOS account |
 | 06+ | MCP server, AI host, workflow, MCP App, Python risk service, registry, observability, assurance, release | Pending | See master prompt phases 6–18 |
 
