@@ -178,4 +178,19 @@ The user asked to move the project to the E: drive root, keeping the same repo n
 
 ---
 
-*End of handoff document. A new conversation opened on `E:\spendguard-mcp` should read this file plus `docs/implementation-plan.md` and `docs/worklog.md` to have full context before continuing to Phase 05.*
+## 8. Post-Handoff Addendum
+
+After this document was first written, two more things happened before the session ended:
+
+1. **Moved the original master build prompt into the repo.** It previously lived alone at `E:\spend-guard\SpendGuard-AI-Devin-Desktop-Master-Build-Prompt.md` (a separate folder from this project, kept around only for that one file). It has been moved to **`docs/SpendGuard-AI-Devin-Desktop-Master-Build-Prompt.md`** in this repo and committed (`47e3912`), because the user was about to delete `E:\spend-guard` entirely.
+2. **Important correction on how to resume:** §6/§7 of this document (and the phase table in §5) only capture *status* and *decisions made* — they do **not** contain the actual spec/acceptance-criteria for Phase 05 and beyond. That spec lives **only** in `docs/SpendGuard-AI-Devin-Desktop-Master-Build-Prompt.md`. A new conversation that reads just this handoff + worklog + implementation-plan will know Phase 05 is "pending" but will have no idea what Phase 05 actually requires.
+
+**Correct instruction for starting the next conversation, in a new window with `E:\spendguard-mcp` open as the workspace:**
+
+> Read `docs/SpendGuard-AI-Devin-Desktop-Master-Build-Prompt.md` (the master spec — this is the actual source of truth for what Phase 5 and every later phase requires), `docs/session-handoff-2026-07-30.md` (this file — detailed record of everything done so far), `docs/implementation-plan.md` (phase status tracker), and `docs/worklog.md` (chronological decision log). Phases 1–4 are done and verified working in production. Continue with Phase 5 (WorkOS AuthKit identity/roles) per the master prompt's spec for that phase.
+
+Verify the new session actually absorbed all four files (e.g. ask it to briefly restate what Phase 5 requires per the master prompt, and confirm the `DATABASE_URL/turbo.json` situation) before letting it proceed.
+
+---
+
+*End of handoff document.*
