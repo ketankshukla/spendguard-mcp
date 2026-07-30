@@ -116,3 +116,11 @@
 **Result:** Repo now lives at `E:\spendguard-mcp`; full check suite (`lint`, `typecheck`, `test`, `build`) passes, dev server serves live Neon-backed `/demo` data, and `git status` is clean against `origin/main`.
 
 **Remaining risks:** User should reopen their IDE window pointed at `E:\spendguard-mcp` (the old window may still reference the deleted path) and manually delete the leftover `E:\mastering-a-skill` skeleton once no process holds it.
+
+## 2026-07-30 — Fix: Vercel deploy failing on `web#build` after Neon connection
+
+**Root cause:** Vercel runs `turbo run build` in strict environment mode, which only passes through env vars explicitly declared in `turbo.json`. `packages/db`'s `getDb()` reads `process.env.DATABASE_URL` at call time; since `turbo.json` never declared it, Turbo filtered it out of the build task's environment, `getDb()` threw during static generation of `/demo`, and `next build` exited 1 (surfaced in the Vercel log as a list of `[warn]`-filtered Neon/Postgres env vars followed by `Error: Command "turbo run build" exited with 1`).
+
+**Fix:** Added `"globalEnv": ["DATABASE_URL"]` to `turbo.json`. Reproduced the failure locally first with `pnpm turbo build --filter=web --env-mode=strict` (failed before the fix, succeeded after — `/demo` prerendered as static content) before pushing.
+
+**Result:** Fix pushed to `main` (`074b85a`); Vercel will redeploy automatically via the GitHub integration.
