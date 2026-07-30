@@ -7,7 +7,7 @@ Tracks phases from the master build prompt, dependencies, risks, and acceptance 
 | # | Phase | Status | Notes |
 |---|---|---|---|
 | 01 | Prepare workstation | Done | See `docs/workstation-check.md` |
-| 02 | Monorepo + first deployed shell | In progress | Requires GitHub repo + Vercel project (human authorization for account/import step) |
+| 02 | Monorepo + first deployed shell | Done | GitHub: https://github.com/ketankshukla/spendguard-mcp · Production: https://spendguard-mcp-web.vercel.app/ |
 | 03 | Deterministic FinOps domain slice | Pending | Local only |
 | 04 | Neon Postgres + Drizzle | Pending | Requires Neon account (via Vercel Marketplace) |
 | 05 | WorkOS AuthKit identity/roles | Pending | Requires WorkOS account |

@@ -17,3 +17,27 @@
 **Result:** Phase 01 acceptance checks pass. Proceeding to Phase 02.
 
 **Remaining risks:** None blocking. Admin rights are unavailable in this shell; any future step requiring elevated install (e.g. Docker Desktop) will need manual user action.
+
+## 2026-07-30 — Phase 02: Monorepo + first deployed shell
+
+**Decisions / commands run:**
+- Scaffolded `apps/web` with `pnpm create next-app@latest` (TypeScript, Tailwind, ESLint, App Router, `src/` dir, `@/*` alias). Next.js resolved to 16.2.12, React 19.2.4.
+- `pnpm approve-builds --all` used to non-interactively approve native postinstall scripts (`sharp`, `unrs-resolver`) — the interactive `pnpm approve-builds` prompt cannot be driven through the automation shell.
+- Created workspace root: `pnpm-workspace.yaml` (packages glob + `onlyBuiltDependencies`), root `package.json` with Turborepo, `turbo.json` pipeline (`build`, `dev`, `lint`, `typecheck`, `test`).
+- Added `packages/config` (shared `tsconfig.base.json`).
+- Added `.github/pull_request_template.md`.
+- Restructured `apps/web/src/app` into a `(marketing)` route group: home, `/architecture`, `/demo`, `/evidence` pages plus a shared nav layout, branded for SpendGuard AI. Updated root `layout.tsx` metadata.
+- Fixed a race condition where `typecheck` ran before Next.js generated typed-route validators for the new pages by adding `"typecheck": { "dependsOn": ["^typecheck", "build"] }` in `turbo.json`.
+- Removed a stray `apps/web/pnpm-lock.yaml` and `apps/web/pnpm-workspace.yaml` left over from the initial non-workspace install.
+- `pnpm turbo lint typecheck build` — all pass (3/3 tasks). `pnpm --filter web dev` verified locally in browser preview with no console errors.
+- `git commit -m "chore: document reproducible workstation"` then `git commit -m "feat: deploy SpendGuard product shell"`.
+- User created GitHub repo `ketankshukla/spendguard-mcp`; pushed with `git remote add origin ...; git branch -M main; git push -u origin main` (browser device-auth flow). Succeeded.
+- User connected the repo to Vercel and deployed. Production URL confirmed by user: https://spendguard-mcp-web.vercel.app/
+
+**Deviations:**
+- Used `npm install -g pnpm` in Phase 01 due to Corepack `EPERM` (recorded there).
+- `pnpm approve-builds --all` (non-interactive flag) used instead of the interactive prompt shown in official docs, since this automation shell cannot answer interactive TUI prompts.
+
+**Result:** Phase 02 acceptance checks pass — local build/lint/typecheck clean, GitHub push succeeded, Vercel production URL live and confirmed by the user. Preview-PR loop (open PR → verify preview → merge → verify production) not yet exercised; will be exercised naturally on the next PR.
+
+**Remaining risks:** Preview-deployment-specific verification (unique PR URL) has not yet been demonstrated since the first push went directly to `main`. Should be verified on the next feature branch/PR.
