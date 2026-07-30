@@ -41,3 +41,23 @@
 **Result:** Phase 02 acceptance checks pass — local build/lint/typecheck clean, GitHub push succeeded, Vercel production URL live and confirmed by the user. Preview-PR loop (open PR → verify preview → merge → verify production) not yet exercised; will be exercised naturally on the next PR.
 
 **Remaining risks:** Preview-deployment-specific verification (unique PR URL) has not yet been demonstrated since the first push went directly to `main`. Should be verified on the next feature branch/PR.
+
+## 2026-07-30 — Phase 03: Deterministic FinOps domain slice
+
+**Decisions / commands run:**
+- Created `packages/domain` (pure TypeScript, no framework/DB/MCP imports): `src/entities.ts` (branded opaque IDs; `Money` as integer minor units + ISO currency; `UtcInstant`/`ReportingPeriod` as explicit ISO strings; `Tenant`, `CostCenter`, `SpendRecord`, `Anomaly`, `SavingsProposal`, `Approval`, `Execution`, `Receipt`) and `src/services.ts` (`summarizeSpendByCostCenter`, `summarizeSpendTrend`, `totalSpend`, `detectSpendAnomalies` using a trailing-average baseline with configurable spike/discount thresholds and data-quality-gap detection, `draftSavingsProposal`, `canTransitionProposal`/`transitionProposal` state machine).
+- Created `packages/contracts` with Zod 4 (`zod@^4.4.3`, current stable, confirmed via `npm view zod version`) schemas for `Money`, `Anomaly`, `SavingsProposal`, MCP tool input/output envelopes (`contractVersion` + `traceId`), and a structured `ErrorEnvelopeSchema` with the required error categories.
+- Wrote `scenario-packs/seed/demo-corp.json`: Demo Corp tenant, 4 cost centers, ~46 monthly spend records (2025-02 through 2026-01) with three deliberate anomalies — a compute spike (~+83%), a storage sustained discount opportunity (~-28%), and a data-platform data-quality gap (missing 2025-10) — plus a networking blip that stays under threshold to prove the detector doesn't over-fire.
+- Added `pnpm --filter @spendguard/domain test` (14 vitest cases: aggregation, zero-spend, trend sort, spike/discount/gap detection, determinism, proposal drafting incl. rejection for data-quality-gap anomalies, and the full state-transition matrix incl. terminal-state rejection) and `pnpm --filter @spendguard/contracts test` (8 vitest cases covering money integer/currency validation and contract envelope requirements).
+- Built the read-only dashboard at `apps/web/src/app/(marketing)/demo` (kept in the existing `(marketing)` route group rather than a separate `(product)` group, since there is no authenticated product yet — Phase 05 will introduce `(product)` when real auth exists) plus a dynamic anomaly detail route at `demo/anomalies/[anomalyId]`. Data loads via `apps/web/src/lib/data/demo-fixture.ts`, which imports the JSON fixture directly and derives every value through the pure domain functions — no fixture number is hard-coded in the UI.
+- Fixed a Turbopack resolution issue: internal relative imports in `packages/domain`/`packages/contracts` using explicit `.js` extensions (valid for Node ESM) were not resolved by Next's Turbopack bundler against sibling `.ts` files, causing "module has no exports" build errors. Switched to extensionless relative imports, which resolve correctly under `moduleResolution: "bundler"`.
+- Fixed a Server/Client Component boundary error: `formatUsd` was defined in a `"use client"` chart module and called directly from a Server Component. Extracted it to a plain `apps/web/src/lib/format.ts` module.
+- `pnpm turbo lint typecheck test build` — all 6 tasks pass across `@spendguard/domain`, `@spendguard/contracts`, and `web`.
+
+**Deviations:**
+- Dashboard placed under `(marketing)/demo` instead of `(product)/demo` per the target repo shape, since `(product)` implies authenticated routes that don't exist until Phase 05. Will migrate when identity lands.
+- Used a dependency-free hand-rolled bar chart (`SpendTrendChart`) instead of Recharts for this phase, to keep the checkpoint minimal; Recharts/shadcn can be introduced later if richer visualization is needed.
+
+**Result:** Phase 03 acceptance checks pass — every displayed number is recomputed from the fixture, detection is deterministic (tested), the domain package has zero framework imports, and boundary cases (zero spend, missing month, negative adjustment) are covered by tests.
+
+**Remaining risks:** None blocking for this phase. Not yet pushed to GitHub/Vercel as of this log entry — planned as the next commit.

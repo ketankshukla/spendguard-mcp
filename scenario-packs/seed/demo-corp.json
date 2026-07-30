@@ -1,0 +1,71 @@
+{
+  "tenant": {
+    "id": "tenant-demo-corp",
+    "name": "Demo Corp"
+  },
+  "costCenters": [
+    { "id": "cc-compute", "tenantId": "tenant-demo-corp", "name": "Compute (EC2/GCE)", "cloudProvider": "simulated" },
+    { "id": "cc-storage", "tenantId": "tenant-demo-corp", "name": "Storage (S3/GCS)", "cloudProvider": "simulated" },
+    { "id": "cc-data-platform", "tenantId": "tenant-demo-corp", "name": "Data Platform", "cloudProvider": "simulated" },
+    { "id": "cc-networking", "tenantId": "tenant-demo-corp", "name": "Networking", "cloudProvider": "simulated" }
+  ],
+  "spendRecords": [
+    { "id": "sr-compute-2025-02", "tenantId": "tenant-demo-corp", "costCenterId": "cc-compute", "period": "2025-02", "amount": { "amountMinorUnits": 1180000, "currency": "USD" }, "recordedAt": "2025-03-01T00:00:00.000Z" },
+    { "id": "sr-compute-2025-03", "tenantId": "tenant-demo-corp", "costCenterId": "cc-compute", "period": "2025-03", "amount": { "amountMinorUnits": 1225000, "currency": "USD" }, "recordedAt": "2025-04-01T00:00:00.000Z" },
+    { "id": "sr-compute-2025-04", "tenantId": "tenant-demo-corp", "costCenterId": "cc-compute", "period": "2025-04", "amount": { "amountMinorUnits": 1201000, "currency": "USD" }, "recordedAt": "2025-05-01T00:00:00.000Z" },
+    { "id": "sr-compute-2025-05", "tenantId": "tenant-demo-corp", "costCenterId": "cc-compute", "period": "2025-05", "amount": { "amountMinorUnits": 1249000, "currency": "USD" }, "recordedAt": "2025-06-01T00:00:00.000Z" },
+    { "id": "sr-compute-2025-06", "tenantId": "tenant-demo-corp", "costCenterId": "cc-compute", "period": "2025-06", "amount": { "amountMinorUnits": 1233000, "currency": "USD" }, "recordedAt": "2025-07-01T00:00:00.000Z" },
+    { "id": "sr-compute-2025-07", "tenantId": "tenant-demo-corp", "costCenterId": "cc-compute", "period": "2025-07", "amount": { "amountMinorUnits": 1268000, "currency": "USD" }, "recordedAt": "2025-08-01T00:00:00.000Z" },
+    { "id": "sr-compute-2025-08", "tenantId": "tenant-demo-corp", "costCenterId": "cc-compute", "period": "2025-08", "amount": { "amountMinorUnits": 1252000, "currency": "USD" }, "recordedAt": "2025-09-01T00:00:00.000Z" },
+    { "id": "sr-compute-2025-09", "tenantId": "tenant-demo-corp", "costCenterId": "cc-compute", "period": "2025-09", "amount": { "amountMinorUnits": 1291000, "currency": "USD" }, "recordedAt": "2025-10-01T00:00:00.000Z" },
+    { "id": "sr-compute-2025-10", "tenantId": "tenant-demo-corp", "costCenterId": "cc-compute", "period": "2025-10", "amount": { "amountMinorUnits": 1276000, "currency": "USD" }, "recordedAt": "2025-11-01T00:00:00.000Z" },
+    { "id": "sr-compute-2025-11", "tenantId": "tenant-demo-corp", "costCenterId": "cc-compute", "period": "2025-11", "amount": { "amountMinorUnits": 1309000, "currency": "USD" }, "recordedAt": "2025-12-01T00:00:00.000Z" },
+    { "id": "sr-compute-2025-12", "tenantId": "tenant-demo-corp", "costCenterId": "cc-compute", "period": "2025-12", "amount": { "amountMinorUnits": 1330000, "currency": "USD" }, "recordedAt": "2026-01-01T00:00:00.000Z" },
+    { "id": "sr-compute-2026-01", "tenantId": "tenant-demo-corp", "costCenterId": "cc-compute", "period": "2026-01", "amount": { "amountMinorUnits": 2410000, "currency": "USD" }, "recordedAt": "2026-02-01T00:00:00.000Z" },
+
+    { "id": "sr-storage-2025-02", "tenantId": "tenant-demo-corp", "costCenterId": "cc-storage", "period": "2025-02", "amount": { "amountMinorUnits": 320000, "currency": "USD" }, "recordedAt": "2025-03-01T00:00:00.000Z" },
+    { "id": "sr-storage-2025-03", "tenantId": "tenant-demo-corp", "costCenterId": "cc-storage", "period": "2025-03", "amount": { "amountMinorUnits": 328000, "currency": "USD" }, "recordedAt": "2025-04-01T00:00:00.000Z" },
+    { "id": "sr-storage-2025-04", "tenantId": "tenant-demo-corp", "costCenterId": "cc-storage", "period": "2025-04", "amount": { "amountMinorUnits": 331000, "currency": "USD" }, "recordedAt": "2025-05-01T00:00:00.000Z" },
+    { "id": "sr-storage-2025-05", "tenantId": "tenant-demo-corp", "costCenterId": "cc-storage", "period": "2025-05", "amount": { "amountMinorUnits": 336000, "currency": "USD" }, "recordedAt": "2025-06-01T00:00:00.000Z" },
+    { "id": "sr-storage-2025-06", "tenantId": "tenant-demo-corp", "costCenterId": "cc-storage", "period": "2025-06", "amount": { "amountMinorUnits": 340000, "currency": "USD" }, "recordedAt": "2025-07-01T00:00:00.000Z" },
+    { "id": "sr-storage-2025-07", "tenantId": "tenant-demo-corp", "costCenterId": "cc-storage", "period": "2025-07", "amount": { "amountMinorUnits": 345000, "currency": "USD" }, "recordedAt": "2025-08-01T00:00:00.000Z" },
+    { "id": "sr-storage-2025-08", "tenantId": "tenant-demo-corp", "costCenterId": "cc-storage", "period": "2025-08", "amount": { "amountMinorUnits": 349000, "currency": "USD" }, "recordedAt": "2025-09-01T00:00:00.000Z" },
+    { "id": "sr-storage-2025-09", "tenantId": "tenant-demo-corp", "costCenterId": "cc-storage", "period": "2025-09", "amount": { "amountMinorUnits": 355000, "currency": "USD" }, "recordedAt": "2025-10-01T00:00:00.000Z" },
+    { "id": "sr-storage-2025-10", "tenantId": "tenant-demo-corp", "costCenterId": "cc-storage", "period": "2025-10", "amount": { "amountMinorUnits": 360000, "currency": "USD" }, "recordedAt": "2025-11-01T00:00:00.000Z" },
+    { "id": "sr-storage-2025-11", "tenantId": "tenant-demo-corp", "costCenterId": "cc-storage", "period": "2025-11", "amount": { "amountMinorUnits": 365000, "currency": "USD" }, "recordedAt": "2025-12-01T00:00:00.000Z" },
+    { "id": "sr-storage-2025-12", "tenantId": "tenant-demo-corp", "costCenterId": "cc-storage", "period": "2025-12", "amount": { "amountMinorUnits": 370000, "currency": "USD" }, "recordedAt": "2026-01-01T00:00:00.000Z" },
+    { "id": "sr-storage-2026-01", "tenantId": "tenant-demo-corp", "costCenterId": "cc-storage", "period": "2026-01", "amount": { "amountMinorUnits": 268000, "currency": "USD" }, "recordedAt": "2026-02-01T00:00:00.000Z" },
+
+    { "id": "sr-data-2025-02", "tenantId": "tenant-demo-corp", "costCenterId": "cc-data-platform", "period": "2025-02", "amount": { "amountMinorUnits": 540000, "currency": "USD" }, "recordedAt": "2025-03-01T00:00:00.000Z" },
+    { "id": "sr-data-2025-03", "tenantId": "tenant-demo-corp", "costCenterId": "cc-data-platform", "period": "2025-03", "amount": { "amountMinorUnits": 552000, "currency": "USD" }, "recordedAt": "2025-04-01T00:00:00.000Z" },
+    { "id": "sr-data-2025-04", "tenantId": "tenant-demo-corp", "costCenterId": "cc-data-platform", "period": "2025-04", "amount": { "amountMinorUnits": 561000, "currency": "USD" }, "recordedAt": "2025-05-01T00:00:00.000Z" },
+    { "id": "sr-data-2025-05", "tenantId": "tenant-demo-corp", "costCenterId": "cc-data-platform", "period": "2025-05", "amount": { "amountMinorUnits": 575000, "currency": "USD" }, "recordedAt": "2025-06-01T00:00:00.000Z" },
+    { "id": "sr-data-2025-06", "tenantId": "tenant-demo-corp", "costCenterId": "cc-data-platform", "period": "2025-06", "amount": { "amountMinorUnits": 582000, "currency": "USD" }, "recordedAt": "2025-07-01T00:00:00.000Z" },
+    { "id": "sr-data-2025-07", "tenantId": "tenant-demo-corp", "costCenterId": "cc-data-platform", "period": "2025-07", "amount": { "amountMinorUnits": 590000, "currency": "USD" }, "recordedAt": "2025-08-01T00:00:00.000Z" },
+    { "id": "sr-data-2025-08", "tenantId": "tenant-demo-corp", "costCenterId": "cc-data-platform", "period": "2025-08", "amount": { "amountMinorUnits": 601000, "currency": "USD" }, "recordedAt": "2025-09-01T00:00:00.000Z" },
+    { "id": "sr-data-2025-09", "tenantId": "tenant-demo-corp", "costCenterId": "cc-data-platform", "period": "2025-09", "amount": { "amountMinorUnits": 615000, "currency": "USD" }, "recordedAt": "2025-10-01T00:00:00.000Z" },
+
+    { "id": "sr-data-2025-11", "tenantId": "tenant-demo-corp", "costCenterId": "cc-data-platform", "period": "2025-11", "amount": { "amountMinorUnits": 640000, "currency": "USD" }, "recordedAt": "2025-12-01T00:00:00.000Z" },
+    { "id": "sr-data-2025-12", "tenantId": "tenant-demo-corp", "costCenterId": "cc-data-platform", "period": "2025-12", "amount": { "amountMinorUnits": 648000, "currency": "USD" }, "recordedAt": "2026-01-01T00:00:00.000Z" },
+    { "id": "sr-data-2026-01", "tenantId": "tenant-demo-corp", "costCenterId": "cc-data-platform", "period": "2026-01", "amount": { "amountMinorUnits": 655000, "currency": "USD" }, "recordedAt": "2026-02-01T00:00:00.000Z" },
+
+    { "id": "sr-net-2025-02", "tenantId": "tenant-demo-corp", "costCenterId": "cc-networking", "period": "2025-02", "amount": { "amountMinorUnits": 210000, "currency": "USD" }, "recordedAt": "2025-03-01T00:00:00.000Z" },
+    { "id": "sr-net-2025-03", "tenantId": "tenant-demo-corp", "costCenterId": "cc-networking", "period": "2025-03", "amount": { "amountMinorUnits": 214000, "currency": "USD" }, "recordedAt": "2025-04-01T00:00:00.000Z" },
+    { "id": "sr-net-2025-04", "tenantId": "tenant-demo-corp", "costCenterId": "cc-networking", "period": "2025-04", "amount": { "amountMinorUnits": 219000, "currency": "USD" }, "recordedAt": "2025-05-01T00:00:00.000Z" },
+    { "id": "sr-net-2025-05", "tenantId": "tenant-demo-corp", "costCenterId": "cc-networking", "period": "2025-05", "amount": { "amountMinorUnits": 223000, "currency": "USD" }, "recordedAt": "2025-06-01T00:00:00.000Z" },
+    { "id": "sr-net-2025-06", "tenantId": "tenant-demo-corp", "costCenterId": "cc-networking", "period": "2025-06", "amount": { "amountMinorUnits": 227000, "currency": "USD" }, "recordedAt": "2025-07-01T00:00:00.000Z" },
+    { "id": "sr-net-2025-07", "tenantId": "tenant-demo-corp", "costCenterId": "cc-networking", "period": "2025-07", "amount": { "amountMinorUnits": 231000, "currency": "USD" }, "recordedAt": "2025-08-01T00:00:00.000Z" },
+    { "id": "sr-net-2025-08", "tenantId": "tenant-demo-corp", "costCenterId": "cc-networking", "period": "2025-08", "amount": { "amountMinorUnits": 236000, "currency": "USD" }, "recordedAt": "2025-09-01T00:00:00.000Z" },
+    { "id": "sr-net-2025-09", "tenantId": "tenant-demo-corp", "costCenterId": "cc-networking", "period": "2025-09", "amount": { "amountMinorUnits": 240000, "currency": "USD" }, "recordedAt": "2025-10-01T00:00:00.000Z" },
+    { "id": "sr-net-2025-10", "tenantId": "tenant-demo-corp", "costCenterId": "cc-networking", "period": "2025-10", "amount": { "amountMinorUnits": 300000, "currency": "USD" }, "recordedAt": "2025-11-01T00:00:00.000Z" },
+    { "id": "sr-net-2025-11", "tenantId": "tenant-demo-corp", "costCenterId": "cc-networking", "period": "2025-11", "amount": { "amountMinorUnits": 249000, "currency": "USD" }, "recordedAt": "2025-12-01T00:00:00.000Z" },
+    { "id": "sr-net-2025-12", "tenantId": "tenant-demo-corp", "costCenterId": "cc-networking", "period": "2025-12", "amount": { "amountMinorUnits": 253000, "currency": "USD" }, "recordedAt": "2026-01-01T00:00:00.000Z" },
+    { "id": "sr-net-2026-01", "tenantId": "tenant-demo-corp", "costCenterId": "cc-networking", "period": "2026-01", "amount": { "amountMinorUnits": 176000, "currency": "USD" }, "recordedAt": "2026-02-01T00:00:00.000Z" }
+  ],
+  "notes": {
+    "cc-compute": "Normal ~2-3% month-over-month growth through 2025, then a spend spike in 2026-01 (~+83% vs trailing baseline) — the primary anomaly for the demo walkthrough.",
+    "cc-storage": "Normal growth through 2025, then a sustained ~28% drop in 2026-01 — a discount/commitment opportunity worth formalizing.",
+    "cc-data-platform": "Normal growth through 2025, with a missing 2025-10 spend record — a data-quality gap.",
+    "cc-networking": "Normal growth with one small transient blip in 2025-10 that stays under the spike threshold — included to prove the detector does not over-fire."
+  }
+}
