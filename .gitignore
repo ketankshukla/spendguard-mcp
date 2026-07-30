@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+.venv/
+__pycache__/
+*.pyc
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+.turbo/
+*.tsbuildinfo
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Editor / OS noise
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Testing / coverage
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+
+# Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Misc
+.vercel/
